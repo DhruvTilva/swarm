@@ -1,20 +1,15 @@
-## 🏷️ Top Badges Row
-
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11%2B-3B82F6?style=flat-square" alt="Python 3.11+" />
   <img src="https://img.shields.io/badge/License-MIT-22C55E?style=flat-square" alt="MIT License" />
   <img src="https://img.shields.io/github/stars/DhruvTilva/swarm?style=flat-square&color=FFD700" alt="GitHub stars" />
-  <img src="https://img.shields.io/badge/Built%20with-GPT--4o-A855F7?style=flat-square" alt="Built with GPT-4o" />
   <img src="https://img.shields.io/badge/Mode-Multi--Agent-F97316?style=flat-square" alt="Multi-Agent" />
 </p>
-
-## 🗣️ Social Proof
 
 > "This shows AI-native development in its true form."
 > "The PM changed requirements mid-build. That felt brutally real."
 > "Swarm is not a tool. It is a glimpse of tomorrow."
 
-## 🐝 ASCII Art Logo
+## 🐝 SWARM
 
 <div align="center">
 <pre>
@@ -24,14 +19,9 @@
 ╚════██║██║███╗██║██╔══██║██╔══██╗██║╚██╔╝██║
 ███████║╚███╔███╔╝██║  ██║██║  ██║██║ ╚═╝ ██║
 ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝
-
-█▀▀▀▀▀█ ▄▄▄ ▄▀█ █▀█ █▀▄▀█
-█ ▄▄▄ █ █▄█ █▀█ █▀▄ █ ▀ █
-█▄▄▄▄▄█ ▀ ▀ ▀ ▀ ▀ ▀ ▀   ▀
 </pre>
 </div>
 
-## 📣 Tagline
 
 <p align="center"><strong>Six AI agents. One command. Real working software.</strong></p>
 <p align="center"><strong>Not a prototype. Not a demo. Production code ships in minutes.</strong></p>
@@ -42,6 +32,17 @@
 ![Swarm Terminal Dashboard](./docs/demo.gif)
 
 > 🐝 Six agents argue, build, and ship together.
+
+## 🤖 Meet The Team
+
+| Agent | Role | Superpower |
+|-------|------|----------|
+| 🏗️ Architect | System designer | Analyzes task deeply, chooses right stack, produces design all agents follow |
+| ⚙️ Backend | API engineer | Reads Architect's design, generates production-grade task-specific code |
+| 🎨 Frontend | UI engineer | Thinks from first principles, generates stunning dark-mode UI for any task |
+| 🧪 Tester | QA enforcer | Actually RUNS the code, finds bugs, assigns fixes, blocks ship if broken |
+| 📝 Docs | Technical writer | Reads actual code, documents reality not promises, Stripe-level quality |
+| 📋 PM | Product manager | Writes real PRD, protects scope, triages bugs, makes ship decisions |
 
 ## 🔥 Why Swarm Hits Different
 
@@ -62,17 +63,6 @@
 
 > No tool matches this PM chaos. 😈
 > It changes requirements mid-build to mirror real teams.
-
-## 🤖 The Team
-
-| Agent | Role | Superpower |
-|-------|------|----------|
-| 🏗️ Architect | System designer | Analyzes task deeply, chooses right stack, produces design all agents follow |
-| ⚙️ Backend | API engineer | Reads Architect's design, generates production-grade task-specific code |
-| 🎨 Frontend | UI engineer | Thinks from first principles, generates stunning dark-mode UI for any task |
-| 🧪 Tester | QA enforcer | Actually RUNS the code, finds bugs, assigns fixes, blocks ship if broken |
-| 📝 Docs | Technical writer | Reads actual code, documents reality not promises, Stripe-level quality |
-| 📋 PM | Product manager | Writes real PRD, protects scope, triages bugs, makes ship decisions |
 
 ## ⚡ Build Phases
 
@@ -286,10 +276,8 @@ If Swarm blew your mind:
 
 ## 🐝 Footer
 
-<p align="center">Built by Dhruv Tilva — github.com/DhruvTilva</p>
 <p align="center">🐝 Swarm — because one AI is never enough</p>
 <p align="center">If this blew your mind, star the repo. It takes 1 second.</p>
-<p align="center">⭐ github.com/DhruvTilva/swarm</p>
 
 ## ⭐ Star History
 
