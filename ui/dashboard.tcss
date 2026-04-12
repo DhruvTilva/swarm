@@ -1,0 +1,270 @@
+Screen {
+    layout: vertical;
+    background: #0d1117;
+    color: #f0f6fc;
+}
+
+#main-root {
+    layout: vertical;
+    height: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+#boot-overlay {
+    layer: overlay;
+    width: 100%;
+    height: 100%;
+    background: #0b0f14;
+    padding: 2 3;
+}
+
+#boot-title {
+    height: 3;
+    content-align: center middle;
+    text-style: bold;
+    color: #ffd60a;
+}
+
+#boot-log {
+    height: 1fr;
+    background: #0b0f14;
+    color: #58a6ff;
+    border: round #30363d;
+}
+
+#scanlines {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: #151b23;
+}
+
+#top-bar {
+    height: 3;
+    padding: 0 2;
+    background: #0d1117;
+    color: #f0f6fc;
+    content-align: center middle;
+    text-style: bold;
+}
+
+#main-grid {
+    height: 1fr;
+    grid-size: 3 2;
+    grid-gutter: 1;
+    padding: 0 1;
+}
+
+.agent-panel {
+    background: #161b22;
+    padding: 0 1;
+    border: round #30363d;
+}
+
+.agent-architect {
+    border: round #008c8c;
+}
+
+.agent-backend {
+    border: round #008c24;
+}
+
+.agent-frontend {
+    border: round #b1004d;
+}
+
+.agent-tester {
+    border: round #a28a00;
+}
+
+.agent-docs {
+    border: round #7a50a7;
+}
+
+.agent-pm {
+    border: round #a54a00;
+}
+
+.agent-architect.pulse-a {
+    border: round #00ffff;
+}
+
+.agent-architect.pulse-b {
+    border: round #00a9a9;
+}
+
+.agent-backend.pulse-a {
+    border: round #00ff41;
+}
+
+.agent-backend.pulse-b {
+    border: round #00ab2b;
+}
+
+.agent-frontend.pulse-a {
+    border: round #ff006e;
+}
+
+.agent-frontend.pulse-b {
+    border: round #ba0050;
+}
+
+.agent-tester.pulse-a {
+    border: round #ffd60a;
+}
+
+.agent-tester.pulse-b {
+    border: round #bda008;
+}
+
+.agent-docs.pulse-a {
+    border: round #c77dff;
+}
+
+.agent-docs.pulse-b {
+    border: round #9c5fd0;
+}
+
+.agent-pm.pulse-a {
+    border: round #ff6b00;
+}
+
+.agent-pm.pulse-b {
+    border: round #c95500;
+}
+
+.agent-panel.argue-flash {
+    border: round #ffffff;
+    background: #28131b;
+}
+
+.agent-panel.complete-wave {
+    border: round #00ff41;
+    background: #10281a;
+}
+
+.agent-header {
+    height: 1;
+    content-align: left middle;
+    color: #f0f6fc;
+}
+
+.agent-meta {
+    height: 1;
+    content-align: left middle;
+    color: #8b949e;
+}
+
+RichLog {
+    background: #161b22;
+    color: #f0f6fc;
+    scrollbar-background: #0d1117;
+    scrollbar-color: #30363d;
+}
+
+#feed-wrap {
+    height: 12;
+    background: #0d1117;
+    padding: 0 1;
+}
+
+#feed-title,
+#feed-bottom {
+    height: 1;
+    color: #ffd60a;
+}
+
+#feed-log {
+    height: 1fr;
+    background: #0d1117;
+    color: #f0f6fc;
+}
+
+#phase-wrap {
+    height: 3;
+    background: #161b22;
+    padding: 0 1;
+    layout: horizontal;
+    align: left middle;
+}
+
+#phase-left {
+    width: 33%;
+    content-align: left middle;
+}
+
+#phase-progress {
+    width: 1fr;
+    margin: 0 1;
+}
+
+#phase-right {
+    width: 27%;
+    content-align: right middle;
+}
+
+ProgressBar > .bar--bar {
+    color: #00ffff;
+    background: #30363d;
+}
+
+ProgressBar > .bar--complete {
+    color: #00ff41;
+}
+
+.complete-flash {
+    background: #0f2a17;
+    border: round #4bff87;
+}
+
+.glow-planning {
+    background: #0d111b;
+}
+
+.glow-implementation {
+    background: #0c1511;
+}
+
+.glow-testing {
+    background: #1a180d;
+}
+
+.glow-complete {
+    background: #1f1a0b;
+}
+
+.glow-planning.heartbeat-a {
+    background: #0f1422;
+}
+
+.glow-planning.heartbeat-b {
+    background: #0c1018;
+}
+
+.glow-implementation.heartbeat-a {
+    background: #0f1b14;
+}
+
+.glow-implementation.heartbeat-b {
+    background: #0b130f;
+}
+
+.glow-testing.heartbeat-a {
+    background: #232010;
+}
+
+.glow-testing.heartbeat-b {
+    background: #18160c;
+}
+
+.glow-complete.heartbeat-a {
+    background: #2a230f;
+}
+
+.glow-complete.heartbeat-b {
+    background: #1d170a;
+}

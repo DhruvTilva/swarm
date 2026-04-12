@@ -1,0 +1,41 @@
+# --- Swarm Configuration -------------------------------------------------
+# Choose one provider section and keep only one active provider at a time.
+
+# Option 1: GitHub Models API (FREE with Copilot Pro)
+provider: openai
+api_key: ""
+model: gpt-4o
+base_url: "https://models.inference.ai.azure.com"
+
+# Option 2: OpenAI
+# provider: openai
+# api_key: "sk-..."
+# model: gpt-4o
+# base_url: "https://api.openai.com/v1"
+
+# Option 3: Anthropic Claude
+# provider: anthropic
+# api_key: "sk-ant-..."
+# model: claude-sonnet-4-20250514
+
+# Option 4: Google Gemini
+# provider: gemini
+# api_key: "AIza..."
+# model: gemini-2.0-flash
+
+# Option 5: Groq (fastest + free tier)
+# provider: groq
+# api_key: "gsk_..."
+# model: llama-3.3-70b-versatile
+
+# Option 6: Ollama (local + free)
+# provider: ollama
+# model: llama3.2
+# base_url: "http://localhost:11434"
+
+# Common settings
+temperature: 0.7
+max_tokens: 2000
+database_path: "swarm.db"
+output_dir: "output"
+agent_delay_seconds: 0.5

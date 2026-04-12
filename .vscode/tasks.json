@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "replace-build-engine",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Copy-Item -Force \"core/build_engine_rewrite.py\" \"core/build_engine.py\""
+			],
+			"isBackground": false
+		},
+		{
+			"label": "cleanup-rewrite-temp",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Remove-Item -Force \"core/build_engine_rewrite.py\""
+			],
+			"isBackground": false
+		},
+		{
+			"label": "compile-touched-files",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"compileall",
+				"core/build_engine.py",
+				"main.py"
+			],
+			"isBackground": false
+		}
+	]
+}

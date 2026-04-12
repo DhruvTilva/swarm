@@ -1,0 +1,16 @@
+[2026-04-12 18:01:10] _run_engine: database is locked
+Traceback (most recent call last):
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\ui\dashboard.py", line 395, in _run_engine
+    await self._engine.run()
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\core\build_engine.py", line 199, in run
+    await self._init_persistence_tables()
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\core\build_engine.py", line 967, in _init_persistence_tables
+    await self._db.execute(
+  File "C:\Users\Dhruv Tilva\AppData\Local\Programs\Python\Python39\lib\site-packages\aiosqlite\core.py", line 193, in execute
+    cursor = await self._execute(self._conn.execute, sql, parameters)
+  File "C:\Users\Dhruv Tilva\AppData\Local\Programs\Python\Python39\lib\site-packages\aiosqlite\core.py", line 132, in _execute
+    return await future
+  File "C:\Users\Dhruv Tilva\AppData\Local\Programs\Python\Python39\lib\site-packages\aiosqlite\core.py", line 115, in run
+    result = function()
+sqlite3.OperationalError: database is locked
+
