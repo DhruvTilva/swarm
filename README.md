@@ -90,18 +90,23 @@ cd swarm
 pip install -r requirements.txt
 
 # 3. Build anything
-python main.py "build me a REST API for a todo app"
+python main.py "build me a YouTube video downloader with format selector"
 ```
 
-Examples:
-
+# 🔥 Swarm handles anything. Try these:
 ```bash
-python main.py "build me a URL shortener"
-python main.py "build me a weather dashboard"
-python main.py "build me a file upload service"
-python main.py "build me a real-time chat API"
-python main.py "build me a JWT authentication system"
+python main.py "build me a real-time crypto price tracker with alerts"
+python main.py "build me an AI-powered resume analyzer with scoring"
+python main.py "build me a GitHub repository analytics dashboard"
+python main.py "build me a personal finance dashboard with charts"
+python main.py "build me an API rate limiter with Redis and analytics"
 ```
+# 🧠 Complex? No problem.
+```bash
+python main.py "build me a multi-tenant SaaS boilerplate with auth, billing, and role-based access"
+```
+# 🎯 One command. Six agents. Real software.
+# No matter what you describe — Swarm figures it out.
 
 ## 🛠️ Installation & Configuration
 
