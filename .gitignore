@@ -1,0 +1,36 @@
+# Secrets
+.env
+access_token.txt
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Database
+*.db
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+
+# Output
+output/
+
+# OS
+.DS_Store
+Thumbs.db
