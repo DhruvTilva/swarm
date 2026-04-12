@@ -14,7 +14,7 @@
 > "The PM changed requirements mid-build. That felt brutally real."
 > "Swarm is not a tool. It is a glimpse of tomorrow."
 
-## 🐝 ASCII Art Logo
+## 🐝 SWARM
 
 <div align="center">
 <pre>
@@ -24,10 +24,6 @@
 ╚════██║██║███╗██║██╔══██║██╔══██╗██║╚██╔╝██║
 ███████║╚███╔███╔╝██║  ██║██║  ██║██║ ╚═╝ ██║
 ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝
-
-█▀▀▀▀▀█ ▄▄▄ ▄▀█ █▀█ █▀▄▀█
-█ ▄▄▄ █ █▄█ █▀█ █▀▄ █ ▀ █
-█▄▄▄▄▄█ ▀ ▀ ▀ ▀ ▀ ▀ ▀   ▀
 </pre>
 </div>
 
@@ -286,10 +282,8 @@ If Swarm blew your mind:
 
 ## 🐝 Footer
 
-<p align="center">Built by Dhruv Tilva — github.com/DhruvTilva</p>
 <p align="center">🐝 Swarm — because one AI is never enough</p>
 <p align="center">If this blew your mind, star the repo. It takes 1 second.</p>
-<p align="center">⭐ github.com/DhruvTilva/swarm</p>
 
 ## ⭐ Star History
 
