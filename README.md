@@ -275,7 +275,7 @@ If Swarm blew your mind:
 → 🐦 Tweet it: "Watched 6 AI agents argue and ship software."
 →  Share it on LinkedIn, Reddit r/programming, HN
 
-## Footer
+## Attention Time
 
 <p align="center">🐝 Swarm — because one AI is never enough</p>
 <p align="center">If this blew your mind, star the repo. It takes 1 second.</p>
