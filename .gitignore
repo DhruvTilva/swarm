@@ -4,7 +4,11 @@ access_token.txt
 
 # Python
 __pycache__/
+**/__pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.py[cod]
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/

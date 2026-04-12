@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import asyncio
 import json
 import re
@@ -415,7 +416,57 @@ class BuildEngine:
 
         self.state.all_generated_files.update(self.state.agent_files.get("Backend", {}))
         self.state.all_generated_files.update(self.state.agent_files.get("Frontend", {}))
+        await self._validate_generated_code()
         self.state.loc_generated = self._count_loc(self.state.all_generated_files)
+
+    async def _validate_generated_code(self) -> None:
+        issues: List[str] = []
+
+        for filepath, content in self.state.all_generated_files.items():
+            if not filepath.endswith(".py"):
+                continue
+            try:
+                ast.parse(content)
+            except SyntaxError as exc:
+                issues.append(f"Syntax error in {filepath}: {exc}")
+
+        repaired_files = self.writer.validate_imports(dict(self.state.all_generated_files))
+        added_files = [path for path in repaired_files if path not in self.state.all_generated_files]
+        if added_files:
+            issues.append(f"Auto-created {len(added_files)} missing module file(s) for import resolution.")
+
+        if issues:
+            await self._publish(
+                "SYSTEM",
+                "IMPLEMENTATION",
+                "validation",
+                "arguing",
+                f"Pre-test validation found {len(issues)} issue(s). Auto-fixing generated code.",
+            )
+            for issue in issues[:12]:
+                await self._publish("SYSTEM", "IMPLEMENTATION", "validation", "working", issue)
+
+        self.state.all_generated_files = repaired_files
+
+        backend_files = {
+            path: content
+            for path, content in repaired_files.items()
+            if path.startswith("app/") and ("Backend" not in self.state.agent_files or path in self.state.agent_files["Backend"])
+        }
+        frontend_files = {
+            path: content
+            for path, content in repaired_files.items()
+            if path.startswith("templates/") or path.startswith("static/")
+        }
+
+        if backend_files:
+            merged_backend = dict(self.state.agent_files.get("Backend", {}))
+            merged_backend.update(backend_files)
+            self.state.agent_files["Backend"] = merged_backend
+        if frontend_files:
+            merged_frontend = dict(self.state.agent_files.get("Frontend", {}))
+            merged_frontend.update(frontend_files)
+            self.state.agent_files["Frontend"] = merged_frontend
 
     async def _run_testing_phase(self) -> None:
         await self._write_output(include_docs=False)

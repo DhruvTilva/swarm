@@ -29,7 +29,16 @@ class BackendAgent(BaseAgent):
             "Python code. No placeholders. No TODOs. Real working code only. "
             "Every line must be deployable today. "
             "You are pragmatic, security-first, and performance-aware. "
-            "You surface tradeoffs and deviations explicitly when needed."
+            "You surface tradeoffs and deviations explicitly when needed.\n\n"
+            "CRITICAL RULE: Every import statement you write in any file MUST "
+            "have a corresponding file that you also create.\n"
+            "Before finishing, scan every generated file and verify:\n"
+            "- Every 'from x import y' has module file x present\n"
+            "- Every local 'import x' has module x present\n"
+            "- No orphan imports anywhere\n"
+            "If you write 'from app.routers.downloads import router' you MUST also "
+            "create app/routers/__init__.py and app/routers/downloads.py. "
+            "Zero exceptions."
         )
 
     async def stream_phase_lines(
@@ -192,6 +201,7 @@ class BackendAgent(BaseAgent):
             "- Follow Architect stack, data models, and API contracts exactly.\n"
             "- Never output generic boilerplate disconnected from the task.\n"
             "- Include production concerns: validation, auth, rate limits, logging, and perf.\n"
+            "- CRITICAL: all local imports must resolve to files you generate in this response.\n"
             "- If you must deviate, call it out and justify.\n"
             "Respond with 5-8 short actionable lines for the dashboard."
         )
@@ -244,6 +254,41 @@ class BackendAgent(BaseAgent):
                 "attach_security_middleware(app)\n"
                 "app.include_router(downloads_router, prefix=\"/downloads\", tags=[\"downloads\"])\n"
             ),
+            "app/routers/__init__.py": "",
+            "app/routers/downloads.py": (
+                "from fastapi import APIRouter, HTTPException\n"
+                "from pydantic import BaseModel, HttpUrl\n"
+                "from app.services.downloads import enqueue, jobs\n"
+                "import uuid\n\n"
+                "router = APIRouter()\n\n"
+                "class DownloadRequest(BaseModel):\n"
+                "    url: HttpUrl\n"
+                "    format: str = \"best\"\n\n"
+                "@router.post(\"/enqueue\")\n"
+                "async def enqueue_download(payload: DownloadRequest) -> dict:\n"
+                "    job_id = str(uuid.uuid4())\n"
+                "    await enqueue(job_id=job_id, url=str(payload.url), fmt=payload.format)\n"
+                "    return {\"job_id\": job_id, \"status\": \"queued\"}\n\n"
+                "@router.get(\"/{job_id}\")\n"
+                "async def get_job(job_id: str) -> dict:\n"
+                "    if job_id not in jobs:\n"
+                "        raise HTTPException(status_code=404, detail=\"job not found\")\n"
+                "    return {\"job_id\": job_id, **jobs[job_id]}\n"
+            ),
+            "app/middleware/__init__.py": "",
+            "app/middleware/security.py": (
+                "from fastapi import FastAPI\n"
+                "from fastapi.middleware.cors import CORSMiddleware\n\n"
+                "def attach_security_middleware(app: FastAPI) -> None:\n"
+                "    app.add_middleware(\n"
+                "        CORSMiddleware,\n"
+                "        allow_origins=[\"*\"],\n"
+                "        allow_credentials=True,\n"
+                "        allow_methods=[\"*\"],\n"
+                "        allow_headers=[\"*\"],\n"
+                "    )\n"
+            ),
+            "app/services/__init__.py": "",
             "app/services/downloads.py": (
                 "import asyncio\n"
                 "from typing import Dict\n"
