@@ -120,7 +120,7 @@ pip install -r requirements.txt
 swarm.config.yaml:
 
 ```yaml
-# GitHub Models (FREE — recommended for most users)
+# GitHub Models (FREE — moderate quality)
 provider: openai
 api_key: "your_github_token"
 model: gpt-4o
@@ -146,7 +146,7 @@ base_url: "https://models.inference.ai.azure.com"
 # api_key: "AIza..."
 # model: gemini-2.0-flash
 
-# OpenAI (paid)
+# OpenAI (paid - highest quality)
 # provider: openai
 # api_key: "sk-..."
 # model: gpt-4o
@@ -170,10 +170,10 @@ python main.py "build me a todo app" --output ./my-output
 
 | Provider | Cost | Speed | Quality | Get Started |
 |----------|------|-------|---------|-------------|
-| GitHub Models | ✅ FREE | Fast | Excellent | github.com/settings/tokens |
-| Groq | ✅ FREE tier | ⚡ Fastest | Very Good | console.groq.com |
+| GitHub Models | ✅ FREE | Fast | Moderate | github.com/settings/tokens |
+| Groq | ✅ FREE tier | ⚡ Fastest | Good | console.groq.com |
 | Ollama | ✅ FREE forever | Medium | Good | ollama.ai |
-| Google Gemini | ✅ Free tier | Fast | Very Good | aistudio.google.com |
+| Google Gemini | ✅ Free tier | Fast | Good | aistudio.google.com |
 | OpenAI | 💳 Paid | Fast | Excellent | platform.openai.com |
 | Anthropic Claude | 💳 Paid | Fast | Excellent | console.anthropic.com |
 
@@ -273,7 +273,7 @@ We review PRs within 48 hours.
 If Swarm blew your mind:
 → ⭐ Star it
 → 🐦 Tweet it: "Watched 6 AI agents argue and ship software."
-→ 📢 Share it on LinkedIn, Reddit r/programming, HN
+→  Share it on LinkedIn, Reddit r/programming, HN
 
 ## Footer
 
