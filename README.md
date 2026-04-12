@@ -5,11 +5,12 @@
   <img src="https://img.shields.io/badge/Mode-Multi--Agent-F97316?style=flat-square" alt="Multi-Agent" />
 </p>
 
-> "This shows AI-native development in its true form."
-> "The PM changed requirements mid-build. That felt brutally real."
-> "Swarm is not a tool. It is a glimpse of tomorrow."
+<h1 align="center">🐝 SWARM</h1>
 
-## 🐝 SWARM
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?size=25&center=true&vCenter=true&width=600&lines=Builds+itself.+Adapts+instantly.;That’s+AI-native." />
+</p>
+
 
 <div align="center">
 <pre>
@@ -25,7 +26,6 @@
 
 <p align="center"><strong>Six AI agents. One command. Real working software.</strong></p>
 <p align="center"><strong>Not a prototype. Not a demo. Production code ships in minutes.</strong></p>
-<p align="center"><strong>The future of software development runs as a swarm.</strong></p>
 
 ## ⚡ See It In Action
 
