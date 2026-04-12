@@ -88,6 +88,12 @@ class FileWriter:
         merged_frontend = self._sanitize_frontend_files(frontend_generated_files or {})
         files.update(merged_frontend)
 
+        files = self._ensure_frontend_bundle(
+            task=task,
+            files=files,
+            frontend_generated_files=merged_frontend,
+        )
+
         merged_docs = self._sanitize_docs_files(docs_generated_files or {})
         files.update(merged_docs)
 
@@ -112,7 +118,13 @@ class FileWriter:
             pm_requirement_change=pm_requirement_change or "",
         )
 
+        files["requirements.txt"] = self._ensure_ui_requirements(files.get("requirements.txt", ""))
         files["app/main.py"] = self._inject_static_ui_serving(files.get("app/main.py", ""))
+
+        # Guarantee directory scaffolding for template/static serving.
+        (project_path / "templates").mkdir(parents=True, exist_ok=True)
+        (project_path / "static" / "css").mkdir(parents=True, exist_ok=True)
+        (project_path / "static" / "js").mkdir(parents=True, exist_ok=True)
 
         for rel_path, content in files.items():
             target = (project_path / rel_path).resolve()
@@ -126,47 +138,224 @@ class FileWriter:
 
     @staticmethod
     def _sanitize_frontend_files(frontend_files: Dict[str, str]) -> Dict[str, str]:
-        allowed_prefixes = ("templates/", "static/")
         out: Dict[str, str] = {}
         for path, content in frontend_files.items():
-            normalized = path.replace("\\", "/").strip()
-            if not normalized or normalized.startswith("/") or ".." in normalized:
-                continue
-            if not normalized.startswith(allowed_prefixes):
+            normalized = FileWriter._normalize_frontend_path(path)
+            if not normalized:
                 continue
             out[normalized] = content
         return out
 
     @staticmethod
-    def _inject_static_ui_serving(main_py: str) -> str:
-        content = main_py or ""
-        if "from fastapi import Request" not in content:
-            content = content.replace("from fastapi import FastAPI\n", "from fastapi import FastAPI\nfrom fastapi import Request\n")
-        if "from fastapi.staticfiles import StaticFiles" not in content:
-            content = "from fastapi.staticfiles import StaticFiles\n" + content
-        if "from fastapi.templating import Jinja2Templates" not in content:
-            content = "from fastapi.templating import Jinja2Templates\n" + content
-        if "from fastapi.responses import HTMLResponse" not in content:
-            content = "from fastapi.responses import HTMLResponse\n" + content
-        if "import os" not in content:
-            content = "import os\n" + content
+    def _normalize_frontend_path(path: str) -> str:
+        normalized = path.replace("\\", "/").strip()
+        if not normalized:
+            return ""
 
-        mount_block = (
-            "\n# Mount static files if directory exists\n"
-            "if os.path.exists(\"static\"):\n"
-            "    app.mount(\"/static\", StaticFiles(directory=\"static\"), name=\"static\")\n\n"
-            "# Serve UI if templates exist\n"
-            "if os.path.exists(\"templates\"):\n"
-            "    _templates = Jinja2Templates(directory=\"templates\")\n\n"
-            "    @app.get(\"/\", response_class=HTMLResponse)\n"
-            "    async def serve_ui(request: Request):\n"
-            "        return _templates.TemplateResponse(\"index.html\", {\"request\": request})\n"
+        # Remove markdown-style wrappers and code-fence artifacts from LLM output.
+        normalized = normalized.strip("` ")
+        normalized = re.sub(r"^\./+", "", normalized)
+        normalized = normalized.lstrip("/")
+        lowered = normalized.lower()
+
+        # Allow common frontend prefixes and collapse them to project-root paths.
+        prefixes = [
+            "frontend/",
+            "ui/",
+            "web/",
+            "client/",
+            "src/",
+        ]
+        for prefix in prefixes:
+            if lowered.startswith(prefix):
+                normalized = normalized[len(prefix):]
+                lowered = normalized.lower()
+                break
+
+        # Normalize direct filenames into canonical locations.
+        if lowered == "index.html":
+            normalized = "templates/index.html"
+            lowered = normalized.lower()
+        elif lowered in {"style.css", "styles.css", "main.css"}:
+            normalized = "static/css/style.css"
+            lowered = normalized.lower()
+        elif lowered in {"app.js", "main.js", "script.js"}:
+            normalized = "static/js/app.js"
+            lowered = normalized.lower()
+
+        if ".." in normalized:
+            return ""
+        if lowered.startswith("templates/"):
+            return normalized
+        if lowered.startswith("static/"):
+            return normalized
+        return ""
+
+    def _ensure_frontend_bundle(
+        self,
+        task: str,
+        files: Dict[str, str],
+        frontend_generated_files: Dict[str, str],
+    ) -> Dict[str, str]:
+        out = dict(files)
+
+        llm_generated_index = "templates/index.html" in frontend_generated_files and bool(
+            str(frontend_generated_files.get("templates/index.html", "")).strip()
         )
 
-        if "# Mount static files if directory exists" not in content:
-            content = content.rstrip() + "\n" + mount_block
+        if not llm_generated_index or not str(out.get("templates/index.html", "")).strip():
+            out["templates/index.html"] = self._fallback_index_html(task)
+
+        if not str(out.get("static/css/style.css", "")).strip():
+            out["static/css/style.css"] = self._fallback_style_css()
+
+        if not str(out.get("static/js/app.js", "")).strip():
+            out["static/js/app.js"] = self._fallback_app_js()
+
+        return out
+
+    def _fallback_index_html(self, task: str) -> str:
+        title = self._title_from_task(task)
+        task_text = task.strip() or "Generated by Swarm"
+        return (
+            "<!DOCTYPE html>\n"
+            "<html lang=\"en\">\n"
+            "<head>\n"
+            "  <meta charset=\"UTF-8\" />\n"
+            "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n"
+            f"  <title>{title}</title>\n"
+            "  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n"
+            "  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />\n"
+            "  <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap\" rel=\"stylesheet\" />\n"
+            "  <link rel=\"stylesheet\" href=\"/static/css/style.css\" />\n"
+            "</head>\n"
+            "<body>\n"
+            "  <main class=\"shell\">\n"
+            "    <section class=\"hero\">\n"
+            "      <span class=\"badge\">Built by Swarm</span>\n"
+            f"      <h1>{title}</h1>\n"
+            f"      <p>{task_text}</p>\n"
+            "      <div class=\"actions\">\n"
+            "        <button id=\"btn-health\" class=\"btn\">Check Health</button>\n"
+            "        <button id=\"btn-summary\" class=\"btn ghost\">Load Summary</button>\n"
+            "      </div>\n"
+            "    </section>\n"
+            "    <section class=\"panel\">\n"
+            "      <h2>Live Response</h2>\n"
+            "      <pre id=\"result\">Ready. Click a button to call the API.</pre>\n"
+            "      <div class=\"links\">\n"
+            "        <a href=\"/docs\" target=\"_blank\" rel=\"noopener\">Open API Docs</a>\n"
+            "      </div>\n"
+            "    </section>\n"
+            "  </main>\n"
+            "  <script src=\"/static/js/app.js\"></script>\n"
+            "</body>\n"
+            "</html>\n"
+        )
+
+    @staticmethod
+    def _fallback_style_css() -> str:
+        return (
+            ":root {\n"
+            "  --bg: #0b1220;\n"
+            "  --surface: #121a2b;\n"
+            "  --text: #e7ecf7;\n"
+            "  --muted: #9ca8c3;\n"
+            "  --accent: #6aa6ff;\n"
+            "  --line: #26324d;\n"
+            "}\n"
+            "* { box-sizing: border-box; }\n"
+            "body { margin: 0; background: radial-gradient(circle at 10% 10%, #152138 0%, var(--bg) 45%); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; }\n"
+            ".shell { max-width: 980px; margin: 0 auto; padding: 32px 20px 48px; display: grid; gap: 18px; }\n"
+            ".hero, .panel { border: 1px solid var(--line); background: linear-gradient(180deg, #121a2b, #0f1728); border-radius: 16px; padding: 22px; }\n"
+            ".badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #1b2a45; color: #cddcff; font-size: 12px; }\n"
+            "h1 { margin: 10px 0 8px; font-size: 34px; line-height: 1.1; }\n"
+            "p { color: var(--muted); margin: 0 0 16px; }\n"
+            ".actions { display: flex; gap: 10px; flex-wrap: wrap; }\n"
+            ".btn { border: 1px solid transparent; background: var(--accent); color: #091224; font-weight: 700; border-radius: 10px; padding: 10px 14px; cursor: pointer; }\n"
+            ".btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }\n"
+            "pre { margin: 8px 0 0; padding: 14px; border-radius: 10px; border: 1px solid var(--line); background: #0b1220; min-height: 120px; white-space: pre-wrap; word-break: break-word; }\n"
+            ".links { margin-top: 10px; }\n"
+            "a { color: #90beff; text-decoration: none; }\n"
+            "a:hover { text-decoration: underline; }\n"
+        )
+
+    @staticmethod
+    def _fallback_app_js() -> str:
+        return (
+            "const result = document.getElementById('result');\n"
+            "const btnHealth = document.getElementById('btn-health');\n"
+            "const btnSummary = document.getElementById('btn-summary');\n"
+            "\n"
+            "async function callApi(path) {\n"
+            "  result.textContent = `Loading ${path}...`;\n"
+            "  try {\n"
+            "    const response = await fetch(path);\n"
+            "    const text = await response.text();\n"
+            "    try {\n"
+            "      const json = JSON.parse(text);\n"
+            "      result.textContent = JSON.stringify(json, null, 2);\n"
+            "    } catch {\n"
+            "      result.textContent = text || `(empty response from ${path})`;\n"
+            "    }\n"
+            "  } catch (err) {\n"
+            "    result.textContent = `Request failed: ${err.message}`;\n"
+            "  }\n"
+            "}\n"
+            "\n"
+            "btnHealth?.addEventListener('click', () => callApi('/health'));\n"
+            "btnSummary?.addEventListener('click', () => callApi('/summary'));\n"
+        )
+
+    @staticmethod
+    def _inject_static_ui_serving(main_py: str) -> str:
+        content = main_py or ""
+        # Ensure imports are present without depending on fragile single-line replacements.
+        import_lines = []
+        if "from fastapi import Request" not in content:
+            import_lines.append("from fastapi import Request")
+        if "from fastapi.staticfiles import StaticFiles" not in content:
+            import_lines.append("from fastapi.staticfiles import StaticFiles")
+        if "from fastapi.templating import Jinja2Templates" not in content:
+            import_lines.append("from fastapi.templating import Jinja2Templates")
+        if "from fastapi.responses import HTMLResponse" not in content:
+            import_lines.append("from fastapi.responses import HTMLResponse")
+
+        if import_lines:
+            content = "\n".join(import_lines) + "\n" + content
+
+        if "app.mount(\"/static\"" not in content:
+            content = content.rstrip() + "\n\napp.mount(\"/static\", StaticFiles(directory=\"static\"), name=\"static\")\n"
+
+        if "_templates = Jinja2Templates(directory=\"templates\")" not in content:
+            content = content.rstrip() + "\n\n_templates = Jinja2Templates(directory=\"templates\")\n"
+
+        if "TemplateResponse(\"index.html\"" not in content:
+            route_block = (
+                "\n@app.get(\"/\", response_class=HTMLResponse)\n"
+                "async def root_ui(request: Request):\n"
+                "    return _templates.TemplateResponse(\"index.html\", {\"request\": request})\n"
+            )
+            content = content.rstrip() + route_block
 
         return content
+
+    @staticmethod
+    def _ensure_ui_requirements(requirements_txt: str) -> str:
+        content = requirements_txt.strip()
+        lines = [line.strip() for line in content.splitlines() if line.strip()]
+        normalized = [line.lower() for line in lines]
+
+        if not any(line.startswith("jinja2") for line in normalized):
+            lines.append("jinja2==3.1.4")
+
+        if not any(line.startswith("fastapi") for line in normalized):
+            lines.append("fastapi==0.115.8")
+
+        if not any(line.startswith("uvicorn") for line in normalized):
+            lines.append("uvicorn==0.34.0")
+
+        return "\n".join(lines) + "\n"
 
     @staticmethod
     def _sanitize_docs_files(docs_files: Dict[str, str]) -> Dict[str, str]:
