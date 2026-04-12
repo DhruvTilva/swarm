@@ -29,7 +29,7 @@
 
 ## ⚡ See It In Action
 
-![Swarm Terminal Dashboard](./docs/demo.gif)
+![Swarm Terminal Dashboard](./doc/demo.gif)
 
 > 🐝 Six agents argue, build, and ship together.
 
