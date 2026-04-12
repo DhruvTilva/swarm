@@ -244,10 +244,6 @@ You watch.
 - [x] Provider health check on startup
 - [ ] Web UI dashboard (browser-based)
 - [ ] Custom agent personalities via config
-- [ ] Plugin system for custom generators
-- [ ] Team mode (multiple humans watching same build)
-- [ ] swarm cloud (hosted, no setup needed)
-- [ ] Agent memory across builds
 
 ## 🤝 Contributing
 
@@ -267,14 +263,14 @@ How to contribute:
 
 We review PRs within 48 hours.
 
-## 📢 Share Swarm
+## 📢 Share
 
 If Swarm blew your mind:
-→ ⭐ Star it: github.com/DhruvTilva/swarm
-→ 🐦 Tweet it: "Watched 6 AI agents argue and ship software. github.com/DhruvTilva/swarm"
+→ ⭐ Star it
+→ 🐦 Tweet it: "Watched 6 AI agents argue and ship software."
 → 📢 Share it on LinkedIn, Reddit r/programming, HN
 
-## 🐝 Footer
+## Footer
 
 <p align="center">🐝 Swarm — because one AI is never enough</p>
 <p align="center">If this blew your mind, star the repo. It takes 1 second.</p>
