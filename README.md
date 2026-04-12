@@ -5,11 +5,12 @@
   <img src="https://img.shields.io/badge/Mode-Multi--Agent-F97316?style=flat-square" alt="Multi-Agent" />
 </p>
 
-> "This shows AI-native development in its true form."
-> "The PM changed requirements mid-build. That felt brutally real."
-> "Swarm is not a tool. It is a glimpse of tomorrow."
+<h1 align="center">🐝 SWARM</h1>
 
-## 🐝 SWARM
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?size=25&center=true&vCenter=true&width=600&lines=Builds+itself.+Adapts+instantly.;That’s+AI-native." />
+</p>
+
 
 <div align="center">
 <pre>
@@ -25,7 +26,6 @@
 
 <p align="center"><strong>Six AI agents. One command. Real working software.</strong></p>
 <p align="center"><strong>Not a prototype. Not a demo. Production code ships in minutes.</strong></p>
-<p align="center"><strong>The future of software development runs as a swarm.</strong></p>
 
 ## ⚡ See It In Action
 
@@ -90,18 +90,23 @@ cd swarm
 pip install -r requirements.txt
 
 # 3. Build anything
-python main.py "build me a REST API for a todo app"
+python main.py "build me a YouTube video downloader with format selector"
 ```
 
-Examples:
-
+# 🔥 Swarm handles anything. Try these:
 ```bash
-python main.py "build me a URL shortener"
-python main.py "build me a weather dashboard"
-python main.py "build me a file upload service"
-python main.py "build me a real-time chat API"
-python main.py "build me a JWT authentication system"
+python main.py "build me a real-time crypto price tracker with alerts"
+python main.py "build me an AI-powered resume analyzer with scoring"
+python main.py "build me a GitHub repository analytics dashboard"
+python main.py "build me a personal finance dashboard with charts"
+python main.py "build me an API rate limiter with Redis and analytics"
 ```
+# 🧠 Complex? No problem.
+```bash
+python main.py "build me a multi-tenant SaaS boilerplate with auth, billing, and role-based access"
+```
+# 🎯 One command. Six agents. Real software.
+# No matter what you describe — Swarm figures it out.
 
 ## 🛠️ Installation & Configuration
 
@@ -244,10 +249,6 @@ You watch.
 - [x] Provider health check on startup
 - [ ] Web UI dashboard (browser-based)
 - [ ] Custom agent personalities via config
-- [ ] Plugin system for custom generators
-- [ ] Team mode (multiple humans watching same build)
-- [ ] swarm cloud (hosted, no setup needed)
-- [ ] Agent memory across builds
 
 ## 🤝 Contributing
 
@@ -267,18 +268,14 @@ How to contribute:
 
 We review PRs within 48 hours.
 
-## 📢 Share Swarm
+## 📢 Share
 
 If Swarm blew your mind:
-→ ⭐ Star it: github.com/DhruvTilva/swarm
-→ 🐦 Tweet it: "Watched 6 AI agents argue and ship software. github.com/DhruvTilva/swarm"
+→ ⭐ Star it
+→ 🐦 Tweet it: "Watched 6 AI agents argue and ship software."
 → 📢 Share it on LinkedIn, Reddit r/programming, HN
 
-## 🐝 Footer
+## Footer
 
 <p align="center">🐝 Swarm — because one AI is never enough</p>
 <p align="center">If this blew your mind, star the repo. It takes 1 second.</p>
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=DhruvTilva/swarm&type=Date)](https://star-history.com/#DhruvTilva/swarm)
