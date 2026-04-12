@@ -278,7 +278,3 @@ If Swarm blew your mind:
 
 <p align="center">🐝 Swarm — because one AI is never enough</p>
 <p align="center">If this blew your mind, star the repo. It takes 1 second.</p>
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=DhruvTilva/swarm&type=Date)](https://star-history.com/#DhruvTilva/swarm)
