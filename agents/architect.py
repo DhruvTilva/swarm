@@ -51,38 +51,101 @@ class ArchitectAgent(BaseAgent):
         project_path: Path,
         architect_design: str,
     ) -> List[str]:
+        """
+        Production-grade architecture compliance review.
+        Enforces:
+        - API contract adherence
+        - Endpoint presence
+        - Structural expectations
+        - Deterministic warnings before LLM reasoning
+        """
+    
         file_map = await self._read_project_snapshots(project_path)
-
+    
+        # --- 1. Extract expected contracts from design ---
+        expected_endpoints = self._extract_expected_endpoints(architect_design)
+    
+        # --- 2. Extract actual endpoints from implementation ---
+        actual_endpoints = self._extract_actual_endpoints(file_map)
+    
+        # --- 3. Deterministic checks (NO LLM) ---
+        warnings: List[str] = []
+    
+        missing = expected_endpoints - actual_endpoints
+        extra = actual_endpoints - expected_endpoints
+    
+        if missing:
+            warnings.append(
+                f"WARNING: Missing endpoints -> {sorted(missing)}"
+            )
+    
+        if extra:
+            warnings.append(
+                f"WARNING: Undocumented endpoints detected -> {sorted(extra)}"
+            )
+    
+        # Health endpoint (baseline contract)
+        if not any("/health" in ep for ep in actual_endpoints):
+            warnings.append(
+                "WARNING: Missing /health endpoint (operability contract violation)."
+            )
+    
+        # Basic layering check
+        if "service.py" not in file_map or "repository.py" not in file_map:
+            warnings.append(
+                "WARNING: Missing service/repository layer separation."
+            )
+    
+        # --- 4. LLM reasoning layer (context-aware review) ---
         prompt = (
-            f"Task: {task}\n"
+            f"Task: {task}\n\n"
             "Architect design (source of truth):\n"
             f"{architect_design}\n\n"
             "Implementation snapshots:\n"
             f"{file_map}\n\n"
-            "Review compliance. Return 4-7 short lines. "
-            "If any deviation exists, include one explicit warning line starting with: WARNING: "
-            "and describe endpoint or contract mismatch."
+            "Detected expected endpoints:\n"
+            f"{sorted(expected_endpoints)}\n\n"
+            "Detected actual endpoints:\n"
+            f"{sorted(actual_endpoints)}\n\n"
+            "Pre-detected warnings:\n"
+            f"{warnings}\n\n"
+            "Now perform a strict architecture compliance review.\n"
+            "- Do NOT repeat the detected warnings unless expanding them\n"
+            "- Identify contract mismatches (request/response/schema)\n"
+            "- Identify structural violations\n"
+            "- Return 4–6 short principal-engineer lines\n"
+            "- If critical issue exists, include ONE line starting with 'WARNING:'"
         )
-
+    
         try:
             response = await self.call_llm_response(
-                temperature=0.3,
-                max_tokens=max(900, self.settings.max_tokens),
+                temperature=0.2,
+                max_tokens=max(800, self.settings.max_tokens),
                 messages=[
                     LLMMessage(role="system", content=self.system_prompt),
                     LLMMessage(role="user", content=prompt),
                 ],
             )
-            text = response.content
-            lines = self._split_to_lines(text)
-            if not lines:
-                lines = self._fallback_compliance_review(task=task, files=file_map, design=architect_design)
-            self.last_output = "\n".join(lines)
-            return lines[:7]
+    
+            llm_lines = self._split_to_lines(response.content)
+    
+            # --- 5. Merge deterministic + LLM output ---
+            final_lines = warnings + llm_lines
+    
+            if not final_lines:
+                final_lines = self._fallback_compliance_review(
+                    task=task, files=file_map, design=architect_design
+                )
+    
+            self.last_output = "\n".join(final_lines)
+            return final_lines[:7]
+    
         except Exception:
-            lines = self._fallback_compliance_review(task=task, files=file_map, design=architect_design)
-            self.last_output = "\n".join(lines)
-            return lines[:7]
+            fallback = warnings or self._fallback_compliance_review(
+                task=task, files=file_map, design=architect_design
+            )
+            self.last_output = "\n".join(fallback)
+            return fallback[:7]
 
     def _fallback_lines(self, phase: str, task: str, context: Dict[str, Any]) -> List[str]:
         if phase == "PLANNING":
