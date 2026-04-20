@@ -14,3 +14,17 @@ Traceback (most recent call last):
     result = function()
 sqlite3.OperationalError: database is locked
 
+[2026-04-20 19:17:52] _run_engine: 'FileWriter' object has no attribute 'validate_imports'
+Traceback (most recent call last):
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\ui\dashboard.py", line 395, in _run_engine
+    await self._engine.run()
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\core\build_engine.py", line 220, in run
+    await self.run_phase(phase)
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\core\build_engine.py", line 278, in run_phase
+    await self._run_implementation_phase()
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\core\build_engine.py", line 419, in _run_implementation_phase
+    await self._validate_generated_code()
+  File "C:\Users\Dhruv Tilva\Desktop\swarm\core\build_engine.py", line 433, in _validate_generated_code
+    repaired_files = self.writer.validate_imports(dict(self.state.all_generated_files))
+AttributeError: 'FileWriter' object has no attribute 'validate_imports'
+

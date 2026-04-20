@@ -489,6 +489,25 @@ class FileWriter:
         if missing:
             raise ValueError(f"Generated project is missing required files: {missing}")
 
+    def validate_imports(self, files: Dict[str, str]) -> Dict[str, str]:
+        repaired = dict(files)
+
+        package_dirs = set()
+        for rel_path in repaired:
+            if not rel_path.endswith(".py"):
+                continue
+
+            parent = Path(rel_path).parent
+            while str(parent) not in {".", ""}:
+                package_dirs.add(parent.as_posix())
+                parent = parent.parent
+
+        for directory in sorted(package_dirs):
+            init_path = f"{directory}/__init__.py"
+            repaired.setdefault(init_path, "")
+
+        return repaired
+
     def _fallback_project(
         self,
         task: str,

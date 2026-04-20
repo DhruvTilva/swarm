@@ -80,9 +80,27 @@ class ArchitectAgent(BaseAgent):
             self.last_output = "\n".join(lines)
             return lines[:7]
         except Exception:
-            lines = self._fallback_compliance_review(task=task, files=file_map, design=architect_design)
-            self.last_output = "\n".join(lines)
-            return lines[:7]
+            fallback = warnings or self._fallback_compliance_review(
+                task=task, files=file_map, design=architect_design
+            )
+            self.last_output = "\n".join(fallback)
+            return fallback[:7]
+
+    def _extract_expected_endpoints(self, design: str) -> set[str]:
+        import re
+    
+        pattern = r"\[(GET|POST|PUT|DELETE|PATCH)\]\s+(/[\w/{}/-]+)"
+        matches = re.findall(pattern, design)
+    
+        return {f"{method} {path}" for method, path in matches}
+
+    def _extract_actual_endpoints(self, files: str) -> set[str]:
+        import re
+    
+        pattern = r'@app\.(get|post|put|delete|patch)\("([^"]+)"'
+        matches = re.findall(pattern, files)
+
+        return {f"{method.upper()} {path}" for method, path in matches}
 
     def _fallback_lines(self, phase: str, task: str, context: Dict[str, Any]) -> List[str]:
         if phase == "PLANNING":
